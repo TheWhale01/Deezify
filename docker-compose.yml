@@ -1,0 +1,41 @@
+services:
+  deezify-backend:
+    image: python:3
+    container_name: deezify-backend
+    env_file: ./.env/backend.env
+    ports:
+      - 3000:3000
+    volumes:
+      - ./backend:/workspace
+    restart: unless-stopped
+    working_dir: /workspace
+    command: sh /workspace/script.sh
+  deezify-frontend:
+    image: node:latest
+    container_name: deezify-frontend
+    env_file: ./.env/frontend.env
+    ports:
+      - 8080:8080
+    volumes:
+      - ./frontend:/workspace
+    restart: unless-stopped
+    working_dir: /workspace
+    command: sh /workspace/script.sh
+  deezify-db:
+    image: postgres:latest
+    container_name: deezify-db
+    env_file: ./.env/db.env
+    volumes:
+      - deezify-db:/var/lib/postgresql/data
+    restart: unless-stopped
+  deezify-pgadmin:
+    image: dpage/pgadmin4
+    container_name: deezify-pgadmin
+    env_file: .env/pgadmin.env
+    ports:
+      - 5050:80
+    restart: unless-stopped
+
+volumes:
+  deezify-db:
+    driver: local
