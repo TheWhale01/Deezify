@@ -1,5 +1,4 @@
-from sqlalchemy import Column, ForeignKey, Integer, String
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, Integer, String
 from database import Base
 
 class User(Base):
@@ -10,14 +9,8 @@ class User(Base):
     service = Column(Integer)
     username = Column(String)
 
-    # Relationships
-    party = relationship('Party')
-
 class Party(Base):
     __tablename__ = "parties"
 
     id = Column(Integer, primary_key=True)
-    owner_id = Column(Integer, ForeignKey("owner.id"))
 
-    # Relationships
-    owner = relationship("User")
