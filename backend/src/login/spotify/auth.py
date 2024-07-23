@@ -1,12 +1,9 @@
 import os
-import sys
 from enums.services import Services
 from sqlalchemy.orm import Session
-from tokens.spotify_token import SpotifyToken
 from utils import generate_random_string
 from fastapi import APIRouter, Request, Depends
 from fastapi.responses import RedirectResponse
-from fastapi.security.oauth2 import OAuth2AuthorizationCodeBearer
 import crud
 import schemas
 from database import get_db
@@ -17,8 +14,6 @@ router = APIRouter(
 )
 
 sp_service = SpotifyService()
-
-oauth2_scheme = OAuth2AuthorizationCodeBearer(authorizationUrl=sp_service.auth_url, tokenUrl=sp_service.token_url)
 
 @router.get('/')
 def login():
@@ -36,7 +31,6 @@ def login():
 @router.get('/callback')
 def callback(request: Request, db: Session = Depends(get_db)):
     token = sp_service.callback(request)
-    sp_service.token = token
     username: str = sp_service.get_user('/me')
     user: schemas.UserCreate = schemas.UserCreate(token=token.access_token, service=Services.SPOTIFY, username=username)
     crud.create_user(db ,user)

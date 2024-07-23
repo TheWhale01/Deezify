@@ -34,12 +34,13 @@ class SpotifyService(MusicService):
         response = requests.post(self.token_url, data=data, headers=headers, json=True)
         if response.status_code != status.HTTP_200_OK:
             raise HTTPException(status_code=response.status_code, detail=response.text)
-        token = SpotifyToken(**(response.json()))
-        self.set_token(token)
-        return token 
+        self.token = SpotifyToken(**(response.json()))
+        self.set_header()
+        return self.token 
 
-    def set_token(self, token: SpotifyToken):
-        self.token = token
+    def set_header(self):
+        if self.token is None:
+            raise HTTPException(status_code=500, detail='token is not set')
         self.headers = {
             'Authorization': f'{self.token.token_type} {self.token.access_token}'
         }
