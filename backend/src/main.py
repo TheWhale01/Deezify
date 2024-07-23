@@ -1,7 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from login.spotify import auth as sp_auth
-from login.deezer import auth as dz_auth
+from routers.login.spotify import auth as sp_auth
+from routers.login.deezer import auth as dz_auth
+from routers import user
 from database import engine, Base
 
 app = FastAPI()
@@ -18,5 +19,6 @@ app.add_middleware(
 
 Base.metadata.create_all(bind=engine)
 
-app.include_router(sp_auth.router)
 app.include_router(dz_auth.router)
+app.include_router(sp_auth.router)
+app.include_router(user.router)

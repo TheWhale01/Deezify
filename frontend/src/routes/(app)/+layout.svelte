@@ -1,15 +1,21 @@
 <script lang="ts">
+	import env from "$lib/env";
+	import { goto } from "$app/navigation";
+
 	async function logout(): Promise<void> {
-		const response = await fetch("");
+		const response = await fetch(env.BACKEND_URL + `/user/logout`, {
+			method: "DELETE",
+			credentials: "include",
+		});
 		if (response.status !== 200) return;
-		// Remove cookie
-		// redirect to login
+		goto("/login");
 	}
 </script>
 
+<!--
 <svelte:head>
 	<script src="https://sdk.scdn.co/spotify-player.js"></script>
-</svelte:head>
+</svelte:head> -->
 
 <button on:click={logout}>Log Out</button>
 <slot></slot>

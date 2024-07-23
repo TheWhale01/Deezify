@@ -9,10 +9,10 @@ services:
       - HOST=0.0.0.0
       - PORT=3000
       - SPOTIFY_SCOPES=user-read-email user-read-private streaming app-remote-control user-read-playback-state user-modify-playback-state user-read-currently-playing
-      - SPOTIFY_CALLBACK_URL=http://192.168.1.154:3000/login/spotify/callback
-      - DEEZER_CALLBACK_URL=http://192.168.1.154:3000/login/deezer/callback
+      - SPOTIFY_CALLBACK_URL=http://localhost:3000/login/spotify/callback
+      - DEEZER_CALLBACK_URL=http://localhost:3000/login/deezer/callback
       - DEEZER_PERMS=email,basic_access
-      - FRONTEND_URI=http://192.168.1.154:8080
+      - FRONTEND_URI=http://localhost:8080
       - DB_HOST=deezify-db
       - DB_NAME=deezify
     volumes:

@@ -11,3 +11,8 @@ def create_user(db: Session, user: schemas.UserCreate):
     db.commit()
     db.refresh(db_user)
     return db_user
+
+def delete_user_from_token(db: Session, access_token: str):
+	user = db.query(models.User).filter(models.User.token == access_token).first()
+	db.delete(user)
+	db.commit()

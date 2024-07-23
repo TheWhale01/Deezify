@@ -24,5 +24,5 @@ def callback(request: Request, db: Session = Depends(get_db)):
     user: schemas.UserCreate = schemas.UserCreate(token=token.access_token, service=Services.DEEZER, username=username)
     crud.create_user(db, user)
     response = RedirectResponse(url=os.getenv('FRONTEND_URI'))
-    response.set_cookie(key='access_token', value=token.access_token, httponly=True, samesite='lax')
+    response.set_cookie(key='access_token', value=token.access_token, httponly=True, samesite=None)
     return response
