@@ -1,10 +1,11 @@
 from fastapi import APIRouter, Depends, Request
 from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
-from database import get_db
+from database.db import get_db
 from enums.services import Services
 from music_service.deezer import DeezerService
-import schemas, crud
+from database.schemas import user as user_schema
+import crud
 import os
 
 router = APIRouter(
@@ -21,7 +22,7 @@ def login():
 def callback(request: Request, db: Session = Depends(get_db)):
     token = dz_service.callback(request)
     username: str = dz_service.get_user('/user/me')
-    user: schemas.UserCreate = schemas.UserCreate(token=token.access_token, service=Services.DEEZER, username=username)
+    user: user_schema.UserCreate = user_schema.UserCreate(token=token.access_token, service=Services.DEEZER, username=username)
     crud.create_user(db, user)
     response = RedirectResponse(url=os.getenv('FRONTEND_URI'))
     response.set_cookie(key='access_token', value=token.access_token, httponly=True, samesite=None)

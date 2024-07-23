@@ -1,10 +1,11 @@
 from sqlalchemy.orm import Session
-import models, schemas
+from database import models
+from database.schemas import user as user_schema
 
 def get_user_by_id(db: Session, user_id: int):
     return db.query(models.User).filter(models.User.id == user_id).first()
 
-def create_user(db: Session, user: schemas.UserCreate):
+def create_user(db: Session, user: user_schema.UserCreate):
     # Do I have to hash token ?
     db_user = models.User(token=user.token, service=user.service, username=user.username)
     db.add(db_user)

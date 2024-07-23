@@ -3,7 +3,7 @@ import sys
 from fastapi.exceptions import HTTPException
 from sqlalchemy.orm import Session
 from starlette.responses import JSONResponse, RedirectResponse
-from database import get_db
+from database.db import get_db
 import crud
 import os
 
