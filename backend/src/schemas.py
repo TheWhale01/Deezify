@@ -5,11 +5,11 @@ class UserBase(BaseModel):
     service: int
     username: str
 
-class UserCreate(BaseModel):
+class UserCreate(UserBase):
     pass
 
-class User(BaseModel):
+class User(UserCreate):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True

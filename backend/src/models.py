@@ -8,9 +8,3 @@ class User(Base):
     token = Column(String, unique=True)
     service = Column(Integer)
     username = Column(String)
-
-class Party(Base):
-    __tablename__ = "parties"
-
-    id = Column(Integer, primary_key=True)
-

@@ -1,11 +1,12 @@
 from abc import ABC, abstractmethod
-from fastapi import HTTPException, status, Request
-from fastapi.responses import RedirectResponse
+from fastapi import Request
+from tokens.token import Token
 
 class MusicService(ABC):
-    def __init__(self, token_url: str, auth_url: str):
+    def __init__(self, token_url: str, auth_url: str, base_url: str):
         self.token_url = token_url
         self.auth_url = auth_url
+        self.base_url: str = base_url
 
     def login(self, url: str):
         # response = requests.get(url)
@@ -15,5 +16,9 @@ class MusicService(ABC):
         return {'url': url}
 
     @abstractmethod
-    def callback(self, request: Request) -> RedirectResponse:
+    def callback(self, request: Request) -> Token:
+        pass
+
+    @abstractmethod
+    def get_user(self, endpoint: str):
         pass
