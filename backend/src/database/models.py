@@ -9,7 +9,7 @@ class User(Base):
     token = Column(String, unique=True, index=True, nullable=False)
     service = Column(Integer, nullable=False)
     username = Column(String, nullable=False)
-    owned_party = relationship("Party", back_populates='owner')
+    owned_party = relationship("Party", back_populates='owner', cascade="all, delete")
 
 class Party(Base):
 	__tablename__ = 'parties'
