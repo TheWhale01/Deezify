@@ -11,3 +11,8 @@ def create_party(db: Session, party: party_schema.PartyCreate, user_id: int):
 
 def get_party(db: Session, party_id: int):
 	return db.query(models.Party).filter(models.Party.id == party_id).first()
+
+def delete_party(db: Session, party_id: int):
+	db_party = get_party(db, party_id)
+	db.delete(db_party)
+	db.commit()

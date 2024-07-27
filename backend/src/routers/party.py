@@ -26,3 +26,12 @@ def create_party(
 	user: user_schema.User = Depends(get_user)
 ):
 	return crud.create_party(db, party, user.id)
+
+@router.delete('/{party_id}')
+def delete_party(
+	party_id: int,
+	db: Session = Depends(get_db),
+	user: user_schema.User = Depends(get_user)
+):
+	crud.delete_party(db, party_id)
+	return {'ok': True}
