@@ -10,31 +10,32 @@ from database.schemas import user as user_schema
 from music_service.spotify import SpotifyService
 
 router = APIRouter(
-    prefix='/login/spotify'
+	prefix='/login/spotify'
 )
 
 sp_service = SpotifyService()
 
 @router.get('/')
 def login():
-    state = generate_random_string(32)
-    url = (
-        f"{sp_service.auth_url}?response_type=code"
-        f"&client_id={os.getenv('SPOTIFY_CLIENT_ID')}"
-        f"&scope={os.getenv('SPOTIFY_SCOPES')}"
-        f"&redirect_uri={os.getenv('SPOTIFY_CALLBACK_URL')}"
-        f"&state={state}"
-    )
-    response = sp_service.login(url)
-    return response
+	state = generate_random_string(32)
+	url = (
+		f"{sp_service.auth_url}?response_type=code"
+		f"&client_id={os.getenv('SPOTIFY_CLIENT_ID')}"
+		f"&scope={os.getenv('SPOTIFY_SCOPES')}"
+		f"&redirect_uri={os.getenv('SPOTIFY_CALLBACK_URL')}"
+		f"&state={state}"
+	)
+	response = sp_service.login(url)
+	return response
 
 @router.get('/callback')
 def callback(request: Request, db: Session = Depends(get_db)):
-    token = sp_service.callback(request)
-    username: str = sp_service.get_user('/me')
-    user: user_schema.UserCreate = user_schema.UserCreate(token=token.access_token, service=Services.SPOTIFY, username=username)
-    db_user = crud.create_user(db ,user)
-    response = RedirectResponse(url=os.getenv('FRONTEND_URI'))
-    response.set_cookie(key='access_token', value=token.access_token, httponly=True, samesite='lax')
-    response.set_cookie(key='user_id', value=str(db_user.id), httponly=True, samesite='lax')
-    return response
+	token = sp_service.callback(request)
+	username: str = sp_service.get_user('/me')
+	user: user_schema.UserCreate = user_schema.UserCreate(token=token.access_token, service=Services.SPOTIFY, username=username)
+	db_user = crud.get_user_by_token(db, token.access_token)
+	if db_user is None:
+		crud.create_user(db ,user)
+	response = RedirectResponse(url=os.getenv('FRONTEND_URI'))
+	response.set_cookie(key='access_token', value=token.access_token, httponly=True, samesite='lax')
+	return response
