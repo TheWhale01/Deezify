@@ -40,14 +40,12 @@ class DeezerService(MusicService):
 		response = requests.get(self.base_url + f'/search?q={query}&access_token={self.token.access_token}&output=json')
 		if response.status_code != status.HTTP_200_OK:
 			raise HTTPException(status_code=response.status_code, detail=response.text)
-		results: dict = {'data': []}	
+		results: dict = {'data': []}
 		for item in response.json()['data']:
-			print(item['title'])
 			results['data'].append({
 				'id': item['id'],
 				'title': item['title'],
 				'artist': item['artist']['name'],
 				'cover': item['album']['cover_medium']
 			})
-		print(results, file=sys.stderr)
 		return results
