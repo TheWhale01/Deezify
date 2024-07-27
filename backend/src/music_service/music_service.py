@@ -9,10 +9,6 @@ class MusicService(ABC):
         self.base_url: str = base_url
 
     def login(self, url: str):
-        # response = requests.get(url)
-        # if response.status_code != status.HTTP_200_OK:
-        #     raise HTTPException(status_code=response.status_code, detail=response.text)
-        # return response
         return {'url': url}
 
     @abstractmethod

@@ -5,7 +5,7 @@ from database.db import get_db
 from enums.services import Services
 from music_service.deezer import DeezerService
 from database.schemas import user as user_schema
-import crud
+from crud import user as crud
 import os
 
 router = APIRouter(
@@ -23,7 +23,8 @@ def callback(request: Request, db: Session = Depends(get_db)):
     token = dz_service.callback(request)
     username: str = dz_service.get_user('/user/me')
     user: user_schema.UserCreate = user_schema.UserCreate(token=token.access_token, service=Services.DEEZER, username=username)
-    crud.create_user(db, user)
+    db_user = crud.create_user(db, user)
     response = RedirectResponse(url=os.getenv('FRONTEND_URI'))
     response.set_cookie(key='access_token', value=token.access_token, httponly=True, samesite=None)
+    response.set_cookie(key='user_id', value=str(db_user.id), httponly=True, samesite='lax')
     return response

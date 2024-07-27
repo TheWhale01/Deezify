@@ -1,10 +1,9 @@
 from fastapi import APIRouter, Depends, Response, Request
-import sys
 from fastapi.exceptions import HTTPException
 from sqlalchemy.orm import Session
 from starlette.responses import JSONResponse, RedirectResponse
 from database.db import get_db
-import crud
+from crud import user as crud
 import os
 
 router = APIRouter(

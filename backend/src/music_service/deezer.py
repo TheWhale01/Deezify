@@ -7,7 +7,11 @@ from tokens.deezer_token import DeezerToken
 
 class DeezerService(MusicService):
     def __init__(self):
-        super().__init__(auth_url=f'https://connect.deezer.com/oauth/auth.php?app_id={os.getenv("DEEZER_APP_ID")}&redirect_uri={os.getenv("DEEZER_CALLBACK_URL")}&perms={os.getenv("DEEZER_PERMS")}', token_url=f'https://connect.deezer.com/oauth/access_token.php?app_id={os.getenv("DEEZER_APP_ID")}&secret={os.getenv("DEEZER_SECRET_KEY")}&output=json', base_url='https://api.deezer.com')
+        super().__init__(
+        	auth_url=f'https://connect.deezer.com/oauth/auth.php?app_id={os.getenv("DEEZER_APP_ID")}&redirect_uri={os.getenv("DEEZER_CALLBACK_URL")}&perms={os.getenv("DEEZER_PERMS")}',
+        	token_url=f'https://connect.deezer.com/oauth/access_token.php?app_id={os.getenv("DEEZER_APP_ID")}&secret={os.getenv("DEEZER_SECRET_KEY")}&output=json',
+        	base_url='https://api.deezer.com'
+        )
         self.token: DeezerToken | None = None
 
     def callback(self, request: Request) -> Token:
