@@ -4,6 +4,7 @@ from routers.login.spotify import auth as sp_auth
 from routers.login.deezer import auth as dz_auth
 from routers import user
 from routers import party
+from routers import search
 from database.db import engine, Base
 
 app = FastAPI()
@@ -24,3 +25,4 @@ app.include_router(dz_auth.router)
 app.include_router(sp_auth.router)
 app.include_router(user.router)
 app.include_router(party.router)
+app.include_router(search.router)
