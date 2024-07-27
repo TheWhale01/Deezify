@@ -19,6 +19,10 @@
 		if (response.status !== 200) return;
 		goto('/');
 	}
+
+	async function add_to_queue(item: SearchResult): Promise<void> {
+		console.log(item);
+	}
 </script>
 
 <h2>Party</h2>
@@ -30,13 +34,20 @@
 
 {#if results}
 	<div>
-		{#each results as item}
-			<span>{item.id}</span>
-			<span>{item.title}</span>
-			<span>{item.artist}</span>
-			<img src="{item.cover}" alt="album cover">
-		{/each}
+		<ul>
+			<li>
+					{#each results as item}
+						<button on:click={() => add_to_queue(item)}>
+							<span>{item.id}</span>
+							<span>{item.title}</span>
+							<span>{item.artist}</span>
+							<img src="{item.cover}" alt="album cover">
+						</button>
+					{/each}
+			</li>
+		</ul>
 	</div>
 {/if}
+
 <!-- show the delete button if the connected user is the admin of this party -->
 <button on:click={delete_party}>Delete</button>
