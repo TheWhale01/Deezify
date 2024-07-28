@@ -27,6 +27,8 @@ services:
     environment:
       - HOST=0.0.0.0
       - PORT=8080
+      - VITE_BACKEND_URL=http://192.168.1.154:3000
+      - VITE_SERVER_BACKEND_URL=http://deezify-backend:3000
     ports:
       - 8080:8080
     volumes:
