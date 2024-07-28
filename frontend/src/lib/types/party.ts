@@ -4,5 +4,5 @@ export default interface Party {
 	id: number;
 	name: string;
 	// users: User[];
-	owner_id: number;
+	owner: boolean;
 }

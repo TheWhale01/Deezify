@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends
+import sys
 from database import models
 from database.db import get_db
 from crud import party as crud
@@ -16,7 +17,12 @@ def get_party(
 	db: Session = Depends(get_db),
 	user: models.User = Depends(get_user)
 ):
-	return crud.get_party(db, party_id)
+	db_party = crud.get_party(db, party_id)
+	return {
+		'id': db_party.id,
+		'name': db_party.name,
+		'owner': user.id == db_party.owner.id
+	}
 
 @router.post('/create')
 def create_party(

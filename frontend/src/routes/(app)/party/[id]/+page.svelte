@@ -52,6 +52,8 @@
 	</div>
 {/if}
 
-<!-- show the delete button if the connected user is the admin of this party -->
-<button on:click={delete_party}>Delete</button>
-<button on:click={generate_invite_link}>Generate invite link</button>
+{#if data.owner}
+	<button on:click={delete_party}>Delete</button>
+	<button on:click={generate_invite_link}>Generate invite link</button>
+{/if }
+
