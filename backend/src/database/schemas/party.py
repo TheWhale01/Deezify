@@ -6,7 +6,6 @@ class User(BaseModel):
 	token: str
 	service: int
 	username: str
-	owned_party_id: Optional["Party"]
 
 	class Config:
 		from_attributes = True
@@ -19,7 +18,6 @@ class PartyCreate(PartyBase):
 
 class Party(PartyCreate):
 	id: int
-	owner_id: int
 
 	class Config:
 		from_attributes = True

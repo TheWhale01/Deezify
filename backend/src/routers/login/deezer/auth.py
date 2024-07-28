@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
 from database.db import get_db
@@ -22,8 +22,9 @@ def callback(request: Request, db: Session = Depends(get_db)):
 	token = instance.service.callback(request)
 	username: str = instance.service.get_user()
 	user: user_schema.UserCreate = user_schema.UserCreate(token=token.access_token, service=Services.DEEZER, username=username)
-	db_user = crud.get_user_by_token(db, token.access_token)
-	if db_user is None:
+	try: 
+		crud.get_user_by_token(db, token.access_token)
+	except HTTPException:
 		crud.create_user(db, user)
 	response = RedirectResponse(url=os.getenv('FRONTEND_URI'))
 	response.set_cookie(key='access_token', value=token.access_token, httponly=True, samesite=None)
