@@ -1,4 +1,5 @@
 from music_service.music_service import	MusicService
+from enums.services import Services
 from tokens.token	import Token
 from tokens.spotify_token	import SpotifyToken
 from fastapi import	status,	HTTPException, Request
@@ -11,7 +12,8 @@ class	SpotifyService(MusicService):
 			super().__init__(
 				token_url='https://accounts.spotify.com/api/token',
 				auth_url=f'https://accounts.spotify.com/authorize',
-				base_url='https://api.spotify.com/v1'
+				base_url='https://api.spotify.com/v1',
+				service=Services.SPOTIFY
 			)
 			self.token:	SpotifyToken | None	=	None
 			self.headers:	dict = {}
@@ -36,7 +38,7 @@ class	SpotifyService(MusicService):
 				raise	HTTPException(status_code=response.status_code,	detail=response.text)
 			self.token = SpotifyToken(**(response.json()))
 			self.set_header()
-			return self.token	
+			return self.token
 
 		def	set_header(self):
 			if self.token	is None:

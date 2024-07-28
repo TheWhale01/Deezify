@@ -1,20 +1,24 @@
+from typing import List
 from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
-from database.db import Base
+from sqlalchemy.orm.base import Mapped
+from database.db import BaseModel
 
-class User(Base):
+class User(BaseModel):
     __tablename__ = "users"
 
-    id = Column(Integer, primary_key=True)
     token = Column(String, unique=True, index=True, nullable=False)
     service = Column(Integer, nullable=False)
     username = Column(String, nullable=False)
-    owned_party = relationship("Party", back_populates='owner', cascade="all, delete")
+    party_id = Column(Integer, ForeignKey('parties.id'))
 
-class Party(Base):
+    owned_party = relationship("Party", back_populates='owner', uselist=False)
+
+class Party(BaseModel):
 	__tablename__ = 'parties'
 
-	id = Column(Integer, primary_key=True)
 	name = Column(String, unique=True, nullable=False, index=True)
-	owner_id = Column(Integer, ForeignKey('users.id'), unique=True, index=True, nullable=False)
+	owner_id = Column(Integer, ForeignKey('users.id'))
+
 	owner = relationship("User", back_populates='owned_party')
+	members = relationship("User")

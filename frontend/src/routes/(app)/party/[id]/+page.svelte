@@ -9,45 +9,49 @@
 
 	const results: SearchResult[] | null = form?.data;
 	async function delete_party(): Promise<void> {
-		const response = await fetch(
-			env.BACKEND_URL + `/party/${data.id}`,
-			{
-				method: "DELETE",
-				credentials: "include",
-			},
-		);
+		const response = await fetch(env.BACKEND_URL + `/party/${data.id}`, {
+			method: "DELETE",
+			credentials: "include",
+		});
 		if (response.status !== 200) return;
-		goto('/');
+		goto("/");
 	}
 
 	async function add_to_queue(item: SearchResult): Promise<void> {
 		console.log(item);
+	}
+
+	function generate_invite_link() {
+		let url: string = window.location + "/add_user";
+		navigator.clipboard.writeText(url);
+		alert("Invite link copied to clipboard");
 	}
 </script>
 
 <h2>Party</h2>
 
 <form method="post">
-	<input type="text" placeholder="Search" name="search">
+	<input type="text" placeholder="Search" name="search" />
 	<button type="submit">Search</button>
 </form>
 
 {#if results}
 	<div>
 		<ul>
-			<li>
-					{#each results as item}
-						<button on:click={() => add_to_queue(item)}>
-							<span>{item.id}</span>
-							<span>{item.title}</span>
-							<span>{item.artist}</span>
-							<img src="{item.cover}" alt="album cover">
-						</button>
-					{/each}
-			</li>
+			{#each results as item}
+				<li>
+					<button on:click={() => add_to_queue(item)}>
+						<span>{item.id}</span>
+						<span>{item.title}</span>
+						<span>{item.artist}</span>
+						<img src={item.cover} alt="album cover" />
+					</button>
+				</li>
+			{/each}
 		</ul>
 	</div>
 {/if}
 
 <!-- show the delete button if the connected user is the admin of this party -->
 <button on:click={delete_party}>Delete</button>
+<button on:click={generate_invite_link}>Generate invite link</button>
