@@ -11,12 +11,13 @@ export const handle = async ({ event, resolve }: any) => {
 		},
 	});
 	const valid_token: boolean = user_response.status === 200;
-	if (!valid_token)
+	if (!valid_token) {
 		event.cookies.delete("access_token", {
 			path: "/",
 		});
+	}
 
-	if ((!token || !valid_token) && !event.route.id?.startsWith("/login"))
+	if (!valid_token && !event.route.id?.startsWith("/login"))
 		throw redirect(302, "/login");
 	else if (token && !event.route.id?.startsWith("/(app)"))
 		throw redirect(302, "/");

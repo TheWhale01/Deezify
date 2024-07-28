@@ -1,10 +1,11 @@
 from fastapi import APIRouter, Depends, Response, Request, status
+import sys
 from fastapi.exceptions import HTTPException
 from sqlalchemy.orm import Session
-from starlette.responses import JSONResponse, RedirectResponse
 from database.db import get_db
 from crud import user as crud
-import os
+from database import models
+from dependancies.user import get_user as get_user_dp
 
 router = APIRouter(
 	prefix="/user"
@@ -28,3 +29,7 @@ def get_user(request: Request, response: Response, db: Session = Depends(get_db)
 	if db_user is None:
 		raise HTTPException(status_code=401, detail='Invalid access token')
 	return {'user': db_user}
+
+@router.get('/party')
+def get_party(user: models.User = Depends(get_user_dp)):
+    return user.party

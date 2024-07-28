@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+	body {
+		@apply flex flex-row w-full h-screen;
+	}
+
+	h1 {
+		@apply font-bold text-xl;
+	}
+
+	h2 {
+		@apply font-semibold text-lg;
+	}
+
+	button {
+		@apply shadow-md rounded bg-green-400 p-4;
+	}
+}
