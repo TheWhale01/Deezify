@@ -16,8 +16,6 @@
 	<div class="h-full flex flex-col items-center overflow-scroll w-full p-2">
 		{#if results}
 			<SearchResults results={results} />
-		{:else }
-			<p>Feel free to search</p>
 		{/if}
 	</div>
 </div>

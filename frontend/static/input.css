@@ -24,11 +24,7 @@
 		@apply flex flex-col items-center justify-between;
 	}
 
-	form * {
-		@apply text-center;
-	}
-
 	input {
-		@apply bg-slate-100 p-2 rounded-lg;
+		@apply bg-slate-100 p-2 rounded-lg text-start;
 	}
 }

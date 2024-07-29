@@ -9,8 +9,9 @@
 </script>
 
 <button on:click={() => add_to_queue(item)}>
-	<span>{item.id}</span>
-	<span>{item.title}</span>
-	<span>{item.artist}</span>
-	<img class="rounded-lg" src={item.cover} alt="album cover" />
+	<div class="flex flex-col justify-center items-center">
+		<img class="rounded-lg" src={item.cover} alt="album cover" />
+		<h1>{item.title}</h1>
+		<span>Artist: {item.artist}</span>
+	</div>
 </button>

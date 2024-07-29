@@ -10,6 +10,7 @@
 	let party: boolean = $state(false);
 	let owner: boolean = true;
 	let pathname: string = $state('');
+
 	onMount(() => {
 		pathname = window.location.pathname;
 		const url = $state({value: window.location.pathname});
