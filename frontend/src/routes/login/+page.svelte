@@ -12,5 +12,5 @@
 </script>
 
 <h2>login</h2>
-<button on:click={() => login("spotify")}>Spotify</button>
-<button on:click={() => login("deezer")}>Deezer</button>
+<button onclick={() => login("spotify")}>Spotify</button>
+<button onclick={() => login("deezer")}>Deezer</button>

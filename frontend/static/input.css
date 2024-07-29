@@ -16,6 +16,19 @@
 	}
 
 	button {
-		@apply shadow-md rounded bg-green-400 p-4;
+		@apply p-4 bg-green-400 hover:bg-green-500 rounded-lg shadow-sm
+			active:bg-green-600 font-bold;
+	}
+
+	form {
+		@apply flex flex-col items-center justify-between;
+	}
+
+	form * {
+		@apply text-center;
+	}
+
+	input {
+		@apply bg-slate-100 p-2 rounded-lg;
 	}
 }
