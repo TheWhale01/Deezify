@@ -22,7 +22,7 @@
 	<h1>Deezify</h1>
 
 	{#if party}
-		<SidebarButton icon="fa-house" on:click={() => goto(pathname)} />
+		<SidebarButton icon="fa-house" on:click={() => goto(pathname.replace('/search', ''))} />
 		<SidebarButton icon="fa-magnifying-glass" on:click={() => goto(window.location + '/search')} />
 		{#if owner}
 			<SidebarButton icon="fa-trash" on:click={() => delete_party(pathname.replace('/search', ''))} />
