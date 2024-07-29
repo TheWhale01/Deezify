@@ -1,9 +1,5 @@
 <script lang="ts">
 	import env from "$lib/env";
-	import { sidebar } from "$lib/store";
-    	import { onMount } from "svelte";
-
-	onMount(() => $sidebar = false);
 
 	async function login(service: string): Promise<void> {
 		const response = await fetch(env.BACKEND_URL + "/login/" + service);
