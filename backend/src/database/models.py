@@ -18,7 +18,15 @@ class Party(BaseModel):
 	__tablename__ = 'parties'
 
 	name = Column(String, unique=True, nullable=False, index=True)
-	owner_id: Mapped[int] = mapped_column(ForeignKey('users.id'), nullable=False, unique=True)
+	owner_id: Mapped[int] = mapped_column(ForeignKey('users.id', ondelete='CASCADE'), nullable=False, unique=True)
 	
 	owner: Mapped[User] = relationship(back_populates='owned_party', foreign_keys=[owner_id])
 	members: Mapped[list[User]] = relationship(back_populates='party', foreign_keys='[User.party_id]')
+	queue: Mapped['Queue'] = relationship(back_populates='party', foreign_keys='[Queue.party_id]', uselist=False)
+
+class Queue(BaseModel):
+	__tablename__ = 'queues'
+
+	party_id: Mapped[int] = mapped_column(ForeignKey('parties.id', ondelete='CASCADE'), nullable=False, unique=True)
+
+	party: Mapped[Party] = relationship(back_populates='queue', uselist=False)
