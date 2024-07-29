@@ -16,8 +16,8 @@
 	}
 
 	button {
-		@apply p-4 bg-green-400 hover:bg-green-500 rounded-lg shadow-sm
-			active:bg-green-600 font-bold;
+		@apply p-4 bg-sky-400 hover:bg-sky-500 rounded-lg shadow-sm
+			active:bg-sky-600 font-bold;
 	}
 
 	form {
@@ -25,6 +25,6 @@
 	}
 
 	input {
-		@apply bg-slate-100 p-2 rounded-lg text-start;
+		@apply bg-gray-100 p-2 rounded-lg text-start;
 	}
 }

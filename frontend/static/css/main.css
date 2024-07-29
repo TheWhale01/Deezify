@@ -468,7 +468,7 @@ h2 {
 button {
   border-radius: 0.5rem;
   --tw-bg-opacity: 1;
-  background-color: rgb(74 222 128 / var(--tw-bg-opacity));
+  background-color: rgb(56 189 248 / var(--tw-bg-opacity));
   padding: 1rem;
   font-weight: 700;
   --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
@@ -478,12 +478,12 @@ button {
 
 button:hover {
   --tw-bg-opacity: 1;
-  background-color: rgb(34 197 94 / var(--tw-bg-opacity));
+  background-color: rgb(14 165 233 / var(--tw-bg-opacity));
 }
 
 button:active {
   --tw-bg-opacity: 1;
-  background-color: rgb(22 163 74 / var(--tw-bg-opacity));
+  background-color: rgb(2 132 199 / var(--tw-bg-opacity));
 }
 
 form {
@@ -496,7 +496,7 @@ form {
 input {
   border-radius: 0.5rem;
   --tw-bg-opacity: 1;
-  background-color: rgb(241 245 249 / var(--tw-bg-opacity));
+  background-color: rgb(243 244 246 / var(--tw-bg-opacity));
   padding: 0.5rem;
   text-align: start;
 }
