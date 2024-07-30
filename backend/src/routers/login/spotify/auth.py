@@ -13,7 +13,7 @@ router = APIRouter(
     prefix='/login/spotify'
 )
 
-@router.get('/')
+@router.get('')
 def login():
     instance.set_service(Services.SPOTIFY)
     state = generate_random_string(32)
@@ -37,5 +37,5 @@ def callback(request: Request, db: Session = Depends(get_db)):
     except HTTPException:
         crud.create_user(db, user)
     response = RedirectResponse(url=os.getenv('FRONTEND_URI'))
-    response.set_cookie(key='access_token', value=token.access_token, httponly=True, samesite='lax')
+    response.set_cookie(key='access_token', value=token.access_token, httponly=True, samesite='none', secure=True, domain=os.getenv('FRONTEND_URI').replace('https://', ''))
     return response

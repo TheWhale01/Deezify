@@ -12,7 +12,7 @@ router = APIRouter(
 	prefix='/login/deezer'
 )
 
-@router.get('/')
+@router.get('')
 def login():
 	instance.set_service(Services.DEEZER)
 	return instance.service.login(instance.service.auth_url)
@@ -27,5 +27,5 @@ def callback(request: Request, db: Session = Depends(get_db)):
 	except HTTPException:
 		crud.create_user(db, user)
 	response = RedirectResponse(url=os.getenv('FRONTEND_URI'))
-	response.set_cookie(key='access_token', value=token.access_token, httponly=True, samesite=None)
+	response.set_cookie(key='access_token', value=token.access_token, httponly=True, samesite='none', secure=True, domain=os.getenv('FRONTEND_URI').replace('https://', ''))
 	return response

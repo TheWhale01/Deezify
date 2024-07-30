@@ -1,4 +1,5 @@
 #!/bin/bash
 
 npm install
-npm run dev -- --port ${PORT} 
+npm run build
+node build

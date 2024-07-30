@@ -3,20 +3,21 @@ services:
     image: python:3
     container_name: deezify-backend
     env_file: ./.env/backend.env
-    ports:
-      - 3000:3000
     environment:
       - HOST=0.0.0.0
       - PORT=3000
       - SPOTIFY_SCOPES=user-read-email user-read-private streaming app-remote-control user-read-playback-state user-modify-playback-state user-read-currently-playing
-      - SPOTIFY_CALLBACK_URL=http://192.168.1.154:3000/login/spotify/callback
-      - DEEZER_CALLBACK_URL=http://192.168.1.154:3000/login/deezer/callback
+      - SPOTIFY_CALLBACK_URL=https://api.deezify.duckdns.org/login/spotify/callback
+      - DEEZER_CALLBACK_URL=https://api.deezify.duckdns.org/login/deezer/callback
       - DEEZER_PERMS=email,basic_access
-      - FRONTEND_URI=http://192.168.1.154:8080
+      - FRONTEND_URI=https://deezify.duckdns.org
       - DB_HOST=deezify-db
       - DB_NAME=deezify
     volumes:
       - ./backend:/workspace
+    networks:
+      - traefik_default
+      - deezify_default
     restart: unless-stopped
     working_dir: /workspace
     command: sh /workspace/script.sh
@@ -25,14 +26,16 @@ services:
     container_name: deezify-frontend
     env_file: ./.env/frontend.env
     environment:
-      - HOST=0.0.0.0
       - PORT=8080
-      - VITE_BACKEND_URL=http://192.168.1.154:3000
+      - ORIGIN=https://deezify.duckdns.org
+      - FRONTEND_URI=http://deezify.duckdns.org
+      - VITE_BACKEND_URL=https://api.deezify.duckdns.org
       - VITE_SERVER_BACKEND_URL=http://deezify-backend:3000
-    ports:
-      - 8080:8080
     volumes:
       - ./frontend:/workspace
+    networks:
+      - traefik_default
+      - deezify_default
     restart: unless-stopped
     working_dir: /workspace
     command: sh /workspace/script.sh
@@ -42,10 +45,10 @@ services:
     env_file: ./.env/db.env
     environment:
       - POSTGRES_DB=deezify
-    ports:
-      - 5432:5432
     volumes:
       - deezify-db:/var/lib/postgresql/data
+    networks:
+      - deezify_default
     restart: unless-stopped
   # Optional
   deezify-pgadmin:
@@ -54,8 +57,18 @@ services:
     env_file: .env/pgadmin.env
     ports:
       - 5050:80
+    networks:
+      - deezify_default
     restart: unless-stopped
 
 volumes:
   deezify-db:
     driver: local
+networks:
+  traefik_default:
+    name: traefik_default
+    external: true
+  deezify_default:
+    name: deezify_default
+    driver: bridge
+

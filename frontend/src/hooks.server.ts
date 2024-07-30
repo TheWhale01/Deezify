@@ -30,6 +30,10 @@ export const handle = async ({ event, resolve }: any) => {
 	if (!valid_token) {
 		event.cookies.delete("access_token", {
 			path: "/",
+			httpOnly: true,
+			samesite: 'none',
+			secure: true,
+			domain: '.deezify.duckdns.org',
 		});
 	}
 
