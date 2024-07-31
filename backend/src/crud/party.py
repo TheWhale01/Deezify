@@ -1,15 +1,20 @@
 from sqlalchemy.orm import Session
-from fastapi import status
-from starlette.exceptions import HTTPException
+from fastapi import status, HTTPException
 from database import models
 from database.schemas import party as party_schema
+from database.schemas import queue as queue_schema
 from crud.user import get_user_by_id
+from crud.queue import create_queue
 
 def create_party(db: Session, party: party_schema.PartyCreate, user_id: int):
 	db_party = models.Party(**party.model_dump())
 	db_user = get_user_by_id(db, user_id)
 	db_party.owner_id = db_user.id
 	db_party.members.append(db_user)
+	db.add(db_party)
+	db.commit()
+	db_queue = create_queue(db, queue_schema.QueueCreate(party_id=db_party.id))
+	db_party.queue = db_queue
 	db.add(db_party)
 	db.commit()
 	db.refresh(db_party)

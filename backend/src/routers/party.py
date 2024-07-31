@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Depends
-import sys
 from database import models
 from database.db import get_db
 from crud import party as crud
