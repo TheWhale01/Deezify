@@ -24,3 +24,7 @@ class MusicService(ABC):
 	@abstractmethod
 	def search(self, query: str) -> dict:
 		pass
+
+	@abstractmethod
+	def get_track(self, track_id: str) -> dict:
+		pass

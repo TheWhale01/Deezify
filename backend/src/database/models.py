@@ -36,7 +36,12 @@ class Song(BaseModel):
     __tablename__ = 'songs'
 
     song_id: Mapped[str] = mapped_column(nullable=False)
-    service: Mapped[int] = mapped_column()
+    service: Mapped[int] = mapped_column(nullable=False)
     queue_id: Mapped[Queue] = mapped_column(ForeignKey('queues.id', ondelete='CASCADE'), nullable=True)
+    added_by_user: Mapped[int] = mapped_column(ForeignKey('users.id'), nullable=False)
+    title: Mapped[str] = mapped_column(nullable=False)
+    artist: Mapped[str] = mapped_column(nullable=False)
+    cover: Mapped[str] = mapped_column(nullable=False)
 
-    queue: Mapped[Queue] = relationship(back_populates='', foreign_keys=[queue_id])
+    queue: Mapped[Queue] = relationship(back_populates='songs', foreign_keys=[queue_id])
+    added_by: Mapped[User] = relationship(foreign_keys=[added_by_user])

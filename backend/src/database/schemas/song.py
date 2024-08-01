@@ -4,6 +4,10 @@ class SongBase(BaseModel):
     song_id: str
     queue_id: int
     service: int
+    added_by_user: int
+    title: str
+    artist: str
+    cover: str
 
 class SongCreate(SongBase):
     pass

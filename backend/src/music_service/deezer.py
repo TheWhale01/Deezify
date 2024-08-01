@@ -20,7 +20,7 @@ class DeezerService(MusicService):
 	def callback(self, request: Request) -> Token:
 		code : str | None = request.query_params.get('code')
 		if code is None:
-			raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail='no code found')
+			raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="token not set")
 		self.token_url += f'&code={code}'
 		response = requests.get(self.token_url)
 		if response.status_code != status.HTTP_200_OK:
@@ -30,7 +30,7 @@ class DeezerService(MusicService):
 
 	def get_user(self):
 		if self.token is None:
-			raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="token not set")
+			raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="token not set")
 		response = requests.get(self.base_url + f'/user/me?access_token={self.token.access_token}')
 		if response.status_code != status.HTTP_200_OK:
 			raise HTTPException(status_code=response.status_code, detail=response.text)
@@ -38,7 +38,7 @@ class DeezerService(MusicService):
 
 	def search(self, query: str) -> dict:
 		if self.token is None:
-			raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="token not set")
+			raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="token not set")
 		response = requests.get(self.base_url + f'/search?q={query}&access_token={self.token.access_token}&output=json')
 		if response.status_code != status.HTTP_200_OK:
 			raise HTTPException(status_code=response.status_code, detail=response.text)
@@ -51,3 +51,19 @@ class DeezerService(MusicService):
 				'cover': item['album']['cover_medium']
 			})
 		return results
+
+	def get_track(self, track_id: str) -> dict:
+		if self.token is None:
+			raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="token not set")
+		endpoint: str = f'{self.base_url}/track/{track_id}?access_token={self.token.access_token}'
+		response = requests.get(endpoint)
+		if response.status_code != status.HTTP_200_OK:
+			raise HTTPException(
+				status_code=response.status_code,
+				detail=response.text
+			)
+		track: dict = {}
+		track.update({'title': response.json()['title']})
+		track.update({'artist': response.json()['artist']['name']})
+		track.update({'cover': response.json()['album']['cover_big']})
+		return track

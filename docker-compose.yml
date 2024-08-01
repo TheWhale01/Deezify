@@ -27,6 +27,7 @@ services:
     env_file: ./.env/frontend.env
     environment:
       - PORT=8080
+      - HOST=0.0.0.0
       - ORIGIN=https://deezify.duckdns.org
       - FRONTEND_URI=http://deezify.duckdns.org
       - VITE_BACKEND_URL=https://api.deezify.duckdns.org

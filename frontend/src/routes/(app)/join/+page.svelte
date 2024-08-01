@@ -1,8 +1,18 @@
 <script lang="ts">
-	let invite_link: string = '';
+	import { goto } from "$app/navigation";
+	import env from "$lib/env";
 
-	function join(): void {
-		window.location.href = invite_link;
+	let party_code: string = '';
+
+	async function join(): Promise<void> {
+		const response = await fetch(
+		env.BACKEND_URL + `/party/${party_code}/add_user`,
+		{
+			method: "PUT",
+			credentials: 'include'
+		});
+		if (response.status !== 200) return;
+		goto(`/party/${party_code}`);
 	}
 </script>
 
@@ -13,6 +23,6 @@
 <p>or</p>
 <form on:submit={join}>
 	<label for="party code">Enter party code</label>
-	<input type="text" name="party code" bind:value={invite_link} />
+	<input type="text" name="party code" bind:value={party_code} />
 	<button type="submit">Join !</button>
 </form>

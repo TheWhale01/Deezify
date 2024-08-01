@@ -11,7 +11,6 @@
 		});
 	    	if (response.status !== 200)
 	    		return;
-		console.log(await response.json());
 	}
 </script>
 
