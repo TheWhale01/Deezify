@@ -12,7 +12,7 @@
 			credentials: 'include'
 		});
 		if (response.status !== 200) return;
-		goto(`/party/${party_code}`);
+		window.location.reload();
 	}
 </script>
 
@@ -21,7 +21,7 @@
 <p>Scan QR code</p>
 <button>Scan !</button>
 <p>or</p>
-<form on:submit={join}>
+<form on:submit|preventDefault={join}>
 	<label for="party code">Enter party code</label>
 	<input type="text" name="party code" bind:value={party_code} />
 	<button type="submit">Join !</button>

@@ -1,4 +1,9 @@
+import Services from "$lib/enums/services";
+
 export default interface User {
 	id: number;
-	name: string;
+	username: string;
+	token: string;
+	service: Services; 
+	party_id: number;
 }
