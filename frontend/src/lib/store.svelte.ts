@@ -10,5 +10,3 @@ export function rune<T>(init_value: T) {
 export const owner = rune<boolean>(false); 
 export const logged = rune<boolean>(false);
 export const party = rune<boolean>(false);
-export const spotify_loaded = rune<boolean>(false);
-export const spotify_device_id = rune<string>('');

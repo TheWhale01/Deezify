@@ -6,7 +6,7 @@
 	import { onMount } from "svelte";
 	import SidebarButton from "./SidebarButton.svelte";
 	import env from "$lib/env";
-	import { owner, logged, party, spotify_loaded, spotify_device_id } from "$lib/store.svelte";
+	import { owner, logged, party } from "$lib/store.svelte";
 
 	let home_url: string = $state('');
 	let delete_url: string = $state('');

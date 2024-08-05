@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from database import models
 from database.db import get_db
@@ -6,6 +6,7 @@ from dependancies import user as user_dp
 from crud import song as crud
 from database.schemas import song as song_schema
 from music_service import instance
+import requests
 
 router = APIRouter(
     prefix='/song'
@@ -24,3 +25,14 @@ def add_song(song_id: str, db: Session = Depends(get_db), user: models.User = De
 def get_songs(db: Session = Depends(get_db), user: models.User = Depends(user_dp.get_user)):
     songs = crud.get_songs(db, user.party_id)
     return songs
+
+@router.put('/init_playback')
+def init_playback(device_id: str, song_id: str, user: models.User = Depends(user_dp.get_user)):
+    response = requests.put(f'https://api.spotify.com/v1/me/player/play?device_id={device_id}', headers={
+        'Content-Type': 'application/json'
+    }, data={
+        'Authorization': f'Bearer ${user.token}',
+        'context_uri': f'spotify:track:{song_id}'
+    })
+    if response.status_code != status.HTTP_200_OK:
+        raise HTTPException(status_code=response.status_code, detail=response.text)

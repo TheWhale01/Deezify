@@ -2,23 +2,31 @@
 	import SidebarButton from '$lib/components/Sidebar/SidebarButton.svelte';
 	import ResultCard from '$lib/components/ResultCard.svelte';
     	import type Track from '$lib/types/track.js';
-	import { owner, spotify_loaded, spotify_device_id } from '$lib/store.svelte.js';
 	import { onMount } from 'svelte';
+    import env from '$lib/env.js';
 
 	const { data } = $props();
 
+	let spotify_device_id: string = $state('');
 	const songs: Track[] = $state(data['songs']);
 	const current_song: Track = $derived(songs[0]);
 
 	onMount(() => {
 		$effect(() => {
-			if (owner.value && !spotify_loaded.value) {
-				importSpotifyPlayback();
-				if (current_song)
-					initSpotifyPlayback();
-			}
+			if (current_song)
+				initSpotifyPlayback();
 		});
 	});
+
+	async function setSong(): Promise<void> {
+		const response = await fetch(env.BACKEND_URL + `/song/init_playback?device_id=${spotify_device_id}&song_id=${current_song.song_id}`, {
+			method: "PUT",
+			credentials: 'include'
+		});
+		if (response.status !== 200)
+			return ;
+		console.log(await response.json());
+	}
 
 	function initSpotifyPlayback() {
 		window.onSpotifyWebPlaybackSDKReady = () => {
@@ -28,23 +36,15 @@
 				volume: 1,
 			});
 
-			player.addListener('ready', ({ device_id }: {device_id: string}) => {
-				if (spotify_device_id)
-					return ;
-				spotify_device_id.value = device_id;
+			player.addListener('ready', async ({ device_id }: {device_id: string}) => {
+				spotify_device_id = device_id;
+				await setSong();
 				player.togglePlay();
 			});
 			player.connect();
 		}
 	}
 
-	function importSpotifyPlayback() {
-		const script = document.createElement('script');
-		script.src = 'https://sdk.scdn.co/spotify-player.js';
-		script.onload = () => spotify_loaded.value = true;
-		document.body.appendChild(script);
-	}
-	
 	async function delete_song(song: Track): Promise<void> {
 		console.log(song);
 		console.log('WIP');

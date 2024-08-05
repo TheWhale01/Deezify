@@ -11,6 +11,7 @@ export async function load({ cookies }) {
 	if (response_song.status !== 200)
 		return ;
 	const response_song_json = await response_song.json();
+	console.log(response_song_json);
 	return {
 		'songs': response_song_json,
 	};

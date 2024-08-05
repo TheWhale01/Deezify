@@ -3,7 +3,7 @@ import type User from "./user";
 
 export default interface Track {
 	id: number;
-	track_id: number;
+	song_id: number;
 	service: Services;
 	added_by_user: number;
 	title: string;
