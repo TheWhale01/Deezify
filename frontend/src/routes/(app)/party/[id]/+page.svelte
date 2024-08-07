@@ -3,7 +3,7 @@
 	import ResultCard from '$lib/components/ResultCard.svelte';
     	import type Track from '$lib/types/track.js';
 	import { onMount } from 'svelte';
-    import env from '$lib/env.js';
+	import env from '$lib/env.js';
 
 	const { data } = $props();
 
@@ -40,6 +40,10 @@
 				spotify_device_id = device_id;
 				await setSong();
 				player.togglePlay();
+			});
+			player.addListener('player_state_changed', ({ paused, track_window: { current_track } }) => {
+				console.log('Currently Playing', current_track);
+				console.log('Is paused: ', paused);
 			});
 			player.connect();
 		}
