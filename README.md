@@ -5,7 +5,7 @@ It's made with FastAPI, SvelteJS and PostgreSQL. Hope you'll enjoy it.
 > **_NOTE:_** It's a preview: meaning only Spotify and Deezer are supported and no clients
 other than web client are neither supported
 
-A hosted instance can be found at: [https://deezify.thewhale.duckdns.org](https://deezify.thewhale.duckdns.org)
+A hosted instance can be found at: [https://deezify.duckdns.org](https://deezify.duckdns.org)
 
 ## Installation
 1. create `.env` directory in the root of the project
