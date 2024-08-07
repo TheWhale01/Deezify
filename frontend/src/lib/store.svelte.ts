@@ -1,6 +1,6 @@
 export function rune<T>(init_value: T) {
 	let value: T = $state(init_value);
-	
+
 	return {
 		get value() { return value },
 		set value(v: T) { value = v },

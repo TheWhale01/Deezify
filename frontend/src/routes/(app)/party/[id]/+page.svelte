@@ -57,7 +57,7 @@
 	<ResultCard item={current_song} />
 {/if }
 <div class="flex flex-col">
-	<h2>Queue</h2>
+<h2>Queue</h2>
 	{#if songs && songs.length}
 		{#each songs as song }
 			<div>
