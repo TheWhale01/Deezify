@@ -8,6 +8,7 @@
 	const { data } = $props();
 
 	let spotify_device_id: string = $state('');
+	let has_removed_current_track: boolean = $state(false);
 	const songs: Track[] = $state(data['songs']);
 	const current_song: Track = $derived(songs[0]);
 
@@ -43,7 +44,10 @@
 			});
 			player.addListener('player_state_changed', ({ paused, track_window: { current_track } }) => {
 				console.log('Currently Playing', current_track);
-				console.log('Is paused: ', paused);
+				if (!has_removed_current_track && paused && current_track['id'] === current_song.id) {
+					has_removed_current_track = true;
+					songs.splice(0, 1);
+				}
 			});
 			player.connect();
 		}
