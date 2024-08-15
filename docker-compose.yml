@@ -24,7 +24,6 @@ services:
   deezify-frontend:
     image: node:latest
     container_name: deezify-frontend
-    env_file: ./.env/frontend.env
     environment:
       - PORT=8080
       - HOST=0.0.0.0
@@ -72,4 +71,3 @@ networks:
   deezify_default:
     name: deezify_default
     driver: bridge
-

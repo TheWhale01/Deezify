@@ -15,7 +15,25 @@ A hosted instance can be found at: [https://deezify.duckdns.org](https://deezify
     - `db.env`
     - `pgadmin.env` *_Optional_*
 3. Fill in the necessary variables:
-    > **_NOTE:_** TODO
+```env
+# backend.env
+DEEZER_APP_ID=
+DEEZER_SECRET_KEY=
+SPOTIFY_CLIENT_ID=
+SPOTIFY_CLIENT_SECRET=
+DB_USER=
+DB_PASSWORD=
+```
+```env
+# db.env
+POSTGRES_USER=
+POSTGRES_PASSWORD=
+```
+```env
+# pgadmin.env
+PGADMIN_DEFAULT_EMAIL=
+PGADMIN_DEFAULT_PASSWORD=
+```
 4. Run the `docker compose up --buil -d` command
 
 ## Usage
