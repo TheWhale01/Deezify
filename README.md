@@ -11,7 +11,6 @@ A hosted instance can be found at: [https://deezify.duckdns.org](https://deezify
 1. create `.env` directory in the root of the project
 2. create the following files:
     - `backend.env`
-    - `frontend.env`
     - `db.env`
     - `pgadmin.env` *_Optional_*
 3. Fill in the necessary variables:
@@ -29,6 +28,7 @@ DB_PASSWORD=
 POSTGRES_USER=
 POSTGRES_PASSWORD=
 ```
+*_Optional_*
 ```env
 # pgadmin.env
 PGADMIN_DEFAULT_EMAIL=
