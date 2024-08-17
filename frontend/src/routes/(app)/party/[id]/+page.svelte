@@ -5,10 +5,11 @@
     	import type Track from '$lib/types/track.js';
 	import { onMount } from 'svelte';
 	import env from '$lib/env.js';
-	import { play_state } from '$lib/store.svelte.js';
+	import { setPlayer } from '$lib/store.svelte.js';
 
 	const { data } = $props();
 
+	const playerbar = setPlayer();
 	let spotify_device_id: string = $state('');
 	const songs: Track[] = $state(data['songs']);
 	const current_song: Track = $derived(songs[0]);
@@ -45,7 +46,7 @@
 			});
 
 			player.addListener('player_state_changed', async ({ paused, track_window: { current_track } }) => {
-				play_state.value = paused;
+				player_bar.state = paused;
 				if (current_track.id !== current_song.song_id)
 					songs.shift();
 			});

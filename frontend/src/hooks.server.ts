@@ -21,7 +21,6 @@ export const handle = async ({ event, resolve }: any) => {
 		}
 	});
 
-
 	if (party_response.status === 200) {
 		const party_json = await party_response.json();
 		if (party_json)
