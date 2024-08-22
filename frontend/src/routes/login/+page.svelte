@@ -13,4 +13,4 @@
 
 <h2>login</h2>
 <button onclick={() => login("spotify")}>Spotify</button>
-<button onclick={() => login("deezer")}>Deezer</button>
+<button onclick={() => login("deezer")} disabled class="bg-slate-200 hover:bg-slate-200">Deezer</button>

@@ -67,3 +67,7 @@ class DeezerService(MusicService):
 		track.update({'artist': response.json()['artist']['name']})
 		track.update({'cover': response.json()['album']['cover_big']})
 		return track
+
+	def add_to_queue(self, track_id: str, device_id: str) -> None:
+		print(track_id)
+		print(device_id)

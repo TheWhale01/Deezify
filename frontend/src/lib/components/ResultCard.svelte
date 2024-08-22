@@ -1,16 +1,18 @@
 <script lang="ts">
 	import env from "$lib/env";
 	import type SearchResult from "$lib/types/search_results";
+	import { getPlayer } from "$lib/store.svelte";
 
 	const { item }: { item: SearchResult } = $props();
+	const player = getPlayer();
 
 	async function add_to_queue(item: SearchResult): Promise<void> {
-		const response = await fetch(env.BACKEND_URL + `/song?song_id=${item.id}`, {
+		const response = await fetch(env.BACKEND_URL + `/song?song_id=${item.id}&device_id=${player?.device_id}`, {
 			method: 'POST',
 			credentials: 'include',
 		});
-	    	if (response.status !== 200)
-	    		return;
+	  if (response.status !== 200)
+	  	return;
 	}
 </script>
 

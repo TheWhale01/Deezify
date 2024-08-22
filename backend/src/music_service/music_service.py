@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
 from fastapi import Request
-from requests import Response
 from tokens.token import Token
 
 class MusicService(ABC):
@@ -28,4 +27,8 @@ class MusicService(ABC):
 
 	@abstractmethod
 	def get_track(self, track_id: str) -> dict:
+		pass
+
+	@abstractmethod
+	def add_to_queue(self, track_id: str, device_id: str) -> None: 
 		pass

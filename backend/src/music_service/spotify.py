@@ -81,15 +81,25 @@ class	SpotifyService(MusicService):
 			track.update({'cover': response.json()['album']['images'][0]['url']})
 			return track
 
-		def init_playback(self, device_id: str, song_id: str):
+		def init_playback(self, device_id: str):
 			endpoint: str = f'{self.base_url}/me/player/play?device_id={device_id}'
 			data: dict = {
-				"uris": [
-					f"spotify:track:{song_id}"
-				],
+				# "uris": [
+				# 	f"spotify:track:{song_id}"
+				# ],
 				"position_ms": 0,
 			}
 			response = requests.put(url=endpoint, headers=self.headers, json=data)
 			if response.status_code != status.HTTP_200_OK:
 				raise HTTPException(status_code=response.status_code, detail=response.text)
 			return response
+
+		def add_to_queue(self, track_id: str, device_id: str) -> None:
+			uri: str = f'spotify:track:{track_id}'
+			endpoint: str = f'{self.base_url}/me/player/queue?device_id={device_id}&uri={uri}'
+			response = requests.post(url=endpoint, headers=self.headers)
+			if response.status_code != status.HTTP_200_OK:
+				raise HTTPException(
+					status_code=response.status_code,
+					detail=response.text
+				)
