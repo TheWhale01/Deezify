@@ -8,7 +8,6 @@
 	import { getPlayer, getUser } from '$lib/store.svelte.js';
 	import Services from '$lib/enums/services.js';
 	import Deezer from '$lib/components/Deezer.svelte';
-  import PlayState from '$lib/enums/play_state.js';
 
 	const { data } = $props();
 
@@ -17,61 +16,19 @@
 	const songs: Track[] = $state(data['songs']);
 	const current_song: Track = $derived(songs[0]);
 
-	onMount(() => {
-		switch(user.service) {
-			case Services.SPOTIFY:
-				initSpotifyPlayback();
-				if (playerbar.state !== PlayState.PLAYING)
-					setSong();
-				break;
-			case Services.DEEZER:
-				console.log("bonsoir je ne suis pas moi");
-				break; 
-			default:
-				break;
-		}
-	});
+	$effect(() => {
+		setSong();
+	})
 
 	async function setSong(): Promise<void> {
-		const response = await fetch(env.BACKEND_URL + `/song/init_playback?device_id=${playerbar.device_id}`, {
+		if (!playerbar.device_id || !current_song)
+			return ;
+		const response = await fetch(env.BACKEND_URL + `/song/init_playback?device_id=${playerbar.device_id}&song_id=${songs.length >= 1 ? current_song.song_id : null}`, {
 			method: "PUT",
 			credentials: 'include'
 		});
 		if (response.status !== 200)
 			return ;
-	}
-
-	function initSpotifyPlayback() {
-		window.onSpotifyWebPlaybackSDKReady = () => {
-			const player = new Spotify.Player({
-				name: 'Deezify',
-				getOAuthToken: cb => { cb(user.token) },
-				volume: 1,
-			});
-
-			player.addListener('ready', async ({ device_id }: {device_id: string}) => {
-				playerbar.device_id = device_id;
-				player.togglePlay();
-				player.activateElement()
-			});
-
-			player.addListener('player_state_changed', async ({ paused, track_window: { current_track } }) => {
-				if (current_song && current_track.id !== current_song.song_id)
-					songs.shift();
-				switch (paused) {
-					case true:
-						playerbar.state = PlayState.PAUSED;	
-						break;
-					case false:
-						playerbar.state = PlayState.PLAYING
-						break;
-					default:
-						playerbar.state = PlayState.LOADING;
-						break;
-				}
-			});
-			player.connect();
-		}
 	}
 
 	async function delete_song(song: Track): Promise<void> {
