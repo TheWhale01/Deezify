@@ -47,6 +47,7 @@
 {#if player.current_song}
 	<ResultCard item={player.current_song} />
 {/if }
+
 <div class="flex flex-col">
 <h2>Queue</h2>
 	{#if player.songs && player.songs.length}

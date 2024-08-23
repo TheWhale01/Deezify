@@ -32,3 +32,7 @@ def get_songs(db: Session = Depends(get_db), user: models.User = Depends(user_dp
 @router.put('/init_playback')
 def init_playback(song_id: str | None = None, db: Session = Depends(get_db), user: models.User = Depends(user_dp.get_user)):
 	return instance.service.init_playback(db, user.party_id, song_id)
+
+@router.put('/pause')
+def pause(user: models.User = Depends(user_dp.get_user)):
+    instance.service.pause(user.party.device_id)

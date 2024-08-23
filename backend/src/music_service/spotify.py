@@ -6,6 +6,7 @@ from fastapi import status, HTTPException, Request
 from sqlalchemy.orm import Session
 from crud import party as party_crud 
 import os
+import sys
 import requests
 from base64 import b64encode
 
@@ -115,3 +116,10 @@ class	SpotifyService(MusicService):
 					status_code=response.status_code,
 					detail=response.text
 				)
+
+		def pause(self, device_id: str):
+			print(device_id, file=sys.stderr)
+			endpoint: str = f'{self.base_url}/me/player/pause?device_id={device_id}'
+			response = requests.put(url=endpoint, headers=self.headers)
+			if response.status_code != status.HTTP_200_OK:
+				raise HTTPException(status_code=response.status_code, detail=response.text)
