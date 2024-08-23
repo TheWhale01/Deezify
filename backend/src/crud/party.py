@@ -45,3 +45,9 @@ def add_user(db: Session, party_id: int, user_id: int):
 	db_party.members.append(db_user)
 	db.commit()
 	return db_party
+
+def set_device_id(db: Session, device_id: str, party_id: int):
+	db_party = get_party(db, party_id)
+	db_party.device_id = device_id
+	db.commit()
+	db.refresh(db_party)

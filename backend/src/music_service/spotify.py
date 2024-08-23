@@ -3,6 +3,8 @@ from enums.services import Services
 from tokens.token	import Token
 from tokens.spotify_token	import SpotifyToken
 from fastapi import status, HTTPException, Request
+from sqlalchemy.orm import Session
+from crud import party as party_crud 
 import os
 import requests
 from base64 import b64encode
@@ -87,7 +89,8 @@ class	SpotifyService(MusicService):
 			track.update({'cover': response.json()['album']['images'][0]['url']})
 			return track
 
-		def init_playback(self, device_id: str, song_id: str | None):
+		def init_playback(self, db: Session, party_id: int, song_id: str | None):
+			device_id = party_crud.get_party(db, party_id).device_id
 			endpoint: str = f'{self.base_url}/me/player/play?device_id={device_id}'
 			response = None
 			if song_id:

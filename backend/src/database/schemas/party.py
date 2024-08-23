@@ -17,6 +17,7 @@ class PartyCreate(PartyBase):
 
 class Party(PartyCreate):
 	id: int
+	device_id: str
 
 	class Config:
 		from_attributes = True

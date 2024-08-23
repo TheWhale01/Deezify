@@ -1,5 +1,6 @@
 import PlayState from "./enums/play_state";
 import Services from "./enums/services";
+import type Track from "./types/track";
 
 import env from "./env";
 import { getContext, setContext } from "svelte";
@@ -61,6 +62,8 @@ class User {
 class Player {
   state: PlayState = $state(PlayState.PAUSED);
   device_id: string = $state("");
+  songs: Track[] = $state([]);
+  current_song: Track = $derived(this.songs[0]);
 }
 
 export function setUser(): User {

@@ -47,3 +47,8 @@ def add_user_to_party(
 	user: models.User = Depends(get_user)
 ):
 	crud.add_user(db, party_id, user.id)
+
+@router.post('/device_id')
+def set_device_id(device_id: str, db: Session = Depends(get_db), user: models.User = Depends(get_user)):
+	crud.set_device_id(db, device_id, user.party_id)
+
