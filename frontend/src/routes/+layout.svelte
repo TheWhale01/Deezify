@@ -39,7 +39,6 @@
 			});
 
 			player.addListener('player_state_changed', async ({ paused, track_window: { current_track } }) => {
-				console.log(paused, current_track);
 				switch (paused) {
 					case true:
 						playerbar.state = PlayState.PAUSED;

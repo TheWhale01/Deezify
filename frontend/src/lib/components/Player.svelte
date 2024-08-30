@@ -24,7 +24,7 @@
 	}
 </script>
 
-<div class="bg-neutral-200 w-full flex justify-evenly sticky bottom-0 mt-4">
+<div class="bg-slate-200 w-full flex justify-evenly sticky bottom-0">
 	<PlayerIcon icon="fa-backward"/>
 	{#if player.state === PlayState.PAUSED }
 		<PlayerIcon icon="fa-play" on:click={play}/>
