@@ -8,6 +8,7 @@ from crud import party as party_crud
 import os
 import requests
 from base64 import b64encode
+import sys
 
 class	SpotifyService(MusicService):
 		def __init__(self):
@@ -90,9 +91,14 @@ class	SpotifyService(MusicService):
 			return track
 
 		def init_playback(self, db: Session, party_id: int, song_id: str | None):
-			device_id = party_crud.get_party(db, party_id).device_id
+			party = party_crud.get_party(db, party_id)
+			device_id: str = party.device_id
+			token: str = party.owner.token
 			endpoint: str = f'{self.base_url}/me/player/play?device_id={device_id}'
 			response = None
+			headers: dict = {
+				'Authorization': f'{self.token.token_type} {token}'
+			}
 			if song_id:
 				data: dict = {
 					"uris": [
@@ -100,16 +106,19 @@ class	SpotifyService(MusicService):
 					],
 					"position_ms": 0,
 				}
-				response = requests.put(url=endpoint, headers=self.headers, json=data)
+				response = requests.put(url=endpoint, headers=headers, json=data)
 			else:
-				response = requests.put(url=endpoint, headers=self.headers)
+				response = requests.put(url=endpoint, headers=headers)
 			if response.status_code != status.HTTP_200_OK:
 				raise HTTPException(status_code=response.status_code, detail=response.text)
 
-		def add_to_queue(self, track_id: str, device_id: str) -> None:
+		def add_to_queue(self, track_id: str, device_id: str, token: str) -> None:
 			uri: str = f'spotify:track:{track_id}'
 			endpoint: str = f'{self.base_url}/me/player/queue?device_id={device_id}&uri={uri}'
-			response = requests.post(url=endpoint, headers=self.headers)
+			headers: dict = {
+				'Authorization': f'{self.token.token_type} {token}'
+			}
+			response = requests.post(url=endpoint, headers=headers)
 			if response.status_code != status.HTTP_200_OK:
 				raise HTTPException(
 					status_code=response.status_code,

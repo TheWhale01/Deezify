@@ -7,6 +7,7 @@ from crud import song as crud
 from crud import party as crud_party
 from database.schemas import song as song_schema
 from music_service import instance
+import sys
 
 router = APIRouter(
 	prefix='/song'
@@ -15,10 +16,12 @@ router = APIRouter(
 @router.post('')
 def add_song(song_id: str, db: Session = Depends(get_db), user: models.User = Depends(user_dp.get_user)):
 	track: dict = instance.service.get_track(song_id)
-	device_id: str = crud_party.get_party(db, user.party_id).device_id
+	party = crud_party.get_party(db, user.party_id)
+	device_id: str = party.device_id
 	db_song = crud.create_song(db, song_schema.SongCreate(song_id=song_id, queue_id=user.party.queue.id, service=user.service, added_by_user=user.id, title=track['title'], artist=track['artist'], cover=track['cover']))
-	if device_id != 'undefined' and len(crud.get_songs(db, user.party_id)) > 1:
-		instance.service.add_to_queue(song_id, device_id)
+	if len(crud.get_songs(db, user.party_id)) > 1:
+		print('DEBUG: bonsoir je ne suis pas moi !', file=sys.stderr)
+		instance.service.add_to_queue(song_id, device_id, party.owner.token)
 	return db_song
 
 @router.get(
@@ -35,4 +38,4 @@ def init_playback(song_id: str | None = None, db: Session = Depends(get_db), use
 
 @router.put('/pause')
 def pause(user: models.User = Depends(user_dp.get_user)):
-    instance.service.pause(user.party.device_id)
+	instance.service.pause(user.party.device_id)

@@ -24,6 +24,8 @@
 	});
 	
 	async function setSong(): Promise<void> {
+		if (!user.owner)
+			return ;
 		const response = await fetch(env.BACKEND_URL + `/song/init_playback?song_id=${player.songs.length >= 1 ? player.current_song.song_id : null}`, {
 			method: "PUT",
 			credentials: 'include'

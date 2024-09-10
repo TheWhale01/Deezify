@@ -30,5 +30,5 @@ class MusicService(ABC):
 		pass
 
 	@abstractmethod
-	def add_to_queue(self, track_id: str, device_id: str) -> None: 
+	def add_to_queue(self, track_id: str, device_id: str, token: str) -> None: 
 		pass

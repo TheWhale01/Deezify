@@ -3,13 +3,20 @@
 	import '@fortawesome/fontawesome-free/css/all.min.css'
 	import { setPlayer, setUser } from "$lib/store.svelte";
 	import Services from "$lib/enums/services";
-	import { onMount } from "svelte";
 	import PlayState from "$lib/enums/play_state";
 	import env from "$lib/env";
+	import { onMount } from "svelte";
 
 	const { children } = $props();
 	const user = setUser();
 	const playerbar = setPlayer();
+
+	onMount(async () => {
+		await user.get_me();
+		await user.get_party_owner();
+		if (user.owner)
+			initSpotifyPlayback();
+	})
 
 	async function setDeviceId(device_id: string): Promise<void> {
 		const response = await fetch(env.BACKEND_URL + `/party/device_id?device_id=${device_id}`, {
@@ -20,10 +27,6 @@
 			return;
 	}
 
-	onMount(() => {
-		initSpotifyPlayback();
-	});
-
 	function initSpotifyPlayback() {
 		window.onSpotifyWebPlaybackSDKReady = () => {
 			const player = new Spotify.Player({
@@ -31,10 +34,13 @@
 				getOAuthToken: cb => { cb(user.token) },
 				volume: 1,
 			});
+			player.addListener('not_ready', (message) => console.err(message));
+			player.addListener('account_error', (message) => console.err(message));
+			player.addListener('playback_error', (message) => console.err(message));
 
-			player.addListener('ready', ({ device_id }: {device_id: string}) => {
+			player.addListener('ready', async ({ device_id }: {device_id: string}) => {
 				playerbar.device_id = device_id;
-				setDeviceId(device_id);
+				await setDeviceId(device_id);
 				player.activateElement()
 			});
 

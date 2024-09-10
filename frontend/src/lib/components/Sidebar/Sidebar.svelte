@@ -3,15 +3,10 @@
 	import { goto } from "$app/navigation";
 	import delete_party from "./delete_party";
 	import generate_invite_link from "./generate_invite_link";
-	import { onMount } from "svelte";
 	import SidebarButton from "./SidebarButton.svelte";
 	import { getUser } from "$lib/store.svelte";
 
 	const user = getUser();
-	onMount(async () => {
-		await user.get_me();
-		await user.get_party_owner();
-	});
 </script>
 
 <div class="flex flex-col justify-between items-center h-full p-6 bg-slate-200 shadow-lg">
