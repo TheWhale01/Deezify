@@ -1,6 +1,6 @@
 services:
   deezify-backend:
-    image: python:3
+    build: ./backend
     container_name: deezify-backend
     env_file: ./.env/backend.env
     environment:

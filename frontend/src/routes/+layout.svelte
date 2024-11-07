@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { setNotification } from "$lib/components/Notifier/Notifier.svelte";
+	import Notifications from "$lib/components/Notifier/Notifications.svelte";
 	import Sidebar from "$lib/components/Sidebar/Sidebar.svelte";
 	import '@fortawesome/fontawesome-free/css/all.min.css'
 	import { setPlayer, setUser } from "$lib/store.svelte";
@@ -7,6 +9,7 @@
 	import env from "$lib/env";
 	import { onMount } from "svelte";
 
+	setNotification();
 	const { children } = $props();
 	const user = setUser();
 	const playerbar = setPlayer();
@@ -73,6 +76,7 @@
 </svelte:head>
 
 <Sidebar/>
+<Notifications />
 
 <div class="flex flex-col flex-1 justify-around items-center overflow-scroll">
 	 {@render children()}
