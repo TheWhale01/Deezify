@@ -40,6 +40,5 @@ PGADMIN_DEFAULT_PASSWORD=
 Frontend will be accessible at `http://localhost:8080` and backend at `http://localhost:3000`
 
 ## TODO
-1. Polish playback and add/remove to queue
-2. Socketio when adding playback
-3. Deezer
+1. Socketio when adding playback
+2. Deezer
