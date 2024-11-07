@@ -13,6 +13,7 @@
 	const { children } = $props();
 	const user = setUser();
 	const playerbar = setPlayer();
+	let song_removed: boolean = $state(false);
 
 	onMount(async () => {
 		await user.get_me();
@@ -59,8 +60,13 @@
 						playerbar.state = PlayState.LOADING;
 						break;
 				}
-				if (current_track.id !== playerbar.current_song?.song_id)
-					playerbar.songs.shift();
+				if (song_removed && current_track.id === playerbar.current_song?.song_id) {
+					song_removed = false;
+				}
+				if (!song_removed && current_track.id !== playerbar.current_song?.song_id) {
+					playerbar.remove_song();
+					song_removed = true;
+				}
 			});
 			player.connect();
 		}

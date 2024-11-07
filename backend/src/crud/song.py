@@ -15,10 +15,21 @@ def remove_song(db: Session, id: int):
     if db_song is None:
         raise HTTPException(
             status=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="No party with such id"
+            detail="No song with such id"
         )
     db.delete(db_song)
     db.commit()
+
+def remove_song_id(db: Session, id: str):
+    db_song = db.query(models.Song).filter(models.Song.song_id == id).first()
+    if db_song is None:
+        raise HTTPException(
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="No song with such id"
+        )
+    db.delete(db_song)
+    db.commit()
+
 
 def get_songs(db: Session, party_id: int):
   db_songs = db.query(models.Queue).filter(models.Queue.party_id == party_id).first()

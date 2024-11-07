@@ -1,3 +1,4 @@
+import sys
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from database import models
@@ -33,6 +34,11 @@ def add_song(song_id: str, db: Session = Depends(get_db), user: models.User = De
 def get_songs(db: Session = Depends(get_db), user: models.User = Depends(user_dp.get_user)):
 	songs = crud.get_songs(db, user.party_id)
 	return songs
+
+@router.delete('')
+def delete_song(song_id: str, db: Session = Depends(get_db)):
+    print(song_id, file=sys.stderr)
+    crud.remove_song_id(db, song_id)
 
 @router.put('/init_playback')
 def init_playback(song_id: str | None = None, db: Session = Depends(get_db), user: models.User = Depends(user_dp.get_user)):

@@ -52,6 +52,14 @@ class Player {
 	songs: Track[] = $state([]);
 	current_song: Track = $derived(this.songs[0]);
 	player = $state(undefined);
+
+	async remove_song(): Promise<boolean> {
+		const response = await fetch(env.BACKEND_URL + `/song?song_id=${this.current_song.song_id}`, { method: "DELETE" });
+		if (response.status !== 200)
+			return false;
+		this.songs.shift();
+		return true;
+	}
 }
 
 export function setUser(): User {
