@@ -9,7 +9,7 @@
 	import env from "$lib/env";
 	import { onMount } from "svelte";
 
-	setNotification();
+	const notifier = setNotification();
 	const { children } = $props();
 	const user = setUser();
 	const playerbar = setPlayer();
@@ -37,9 +37,9 @@
 				getOAuthToken: cb => { cb(user.token) },
 				volume: 1,
 			});
-			player.addListener('not_ready', (message) => console.err(message));
-			player.addListener('account_error', (message) => console.err(message));
-			player.addListener('playback_error', (message) => console.err(message));
+			player.addListener('not_ready', (message) => { console.err(message); notifier.add("Playback", message, 'error'); });
+			player.addListener('account_error', (message) => { console.err(message); notifier.add("Playback", message, 'error');});
+			player.addListener('playback_error', (message) => { console.err(message); notifier.add("Playback", message, 'error');});
 
 			player.addListener('ready', async ({ device_id }: {device_id: string}) => {
 				playerbar.device_id = device_id;

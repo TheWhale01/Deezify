@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from database import models
 from database.db import get_db
@@ -7,7 +7,6 @@ from crud import song as crud
 from crud import party as crud_party
 from database.schemas import song as song_schema
 from music_service import instance
-import sys
 
 router = APIRouter(
 	prefix='/song'
@@ -20,8 +19,11 @@ def add_song(song_id: str, db: Session = Depends(get_db), user: models.User = De
 	device_id: str = party.device_id
 	db_song = crud.create_song(db, song_schema.SongCreate(song_id=song_id, queue_id=user.party.queue.id, service=user.service, added_by_user=user.id, title=track['title'], artist=track['artist'], cover=track['cover']))
 	if len(crud.get_songs(db, user.party_id)) > 1:
-		print('DEBUG: bonsoir je ne suis pas moi !', file=sys.stderr)
-		instance.service.add_to_queue(song_id, device_id, party.owner.token)
+		try:
+			instance.service.add_to_queue(song_id, device_id, party.owner.token)
+		except HTTPException as e:
+			crud.remove_song(db, db_song.id)
+			raise e
 	return db_song
 
 @router.get(

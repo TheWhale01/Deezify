@@ -119,7 +119,7 @@ class	SpotifyService(MusicService):
 				'Authorization': f'{self.token.token_type} {token}'
 			}
 			response = requests.post(url=endpoint, headers=headers)
-			if response.status_code != status.HTTP_200_OK:
+			if response.status_code != status.HTTP_200_OK and response.status_code != status.HTTP_204_NO_CONTENT:
 				raise HTTPException(
 					status_code=response.status_code,
 					detail=response.text

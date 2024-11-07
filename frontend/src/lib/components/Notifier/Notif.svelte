@@ -6,7 +6,7 @@
 	const { notif }: { notif: Notification } = $props();
 	const notifier = getNotification();
 	
-	let style = $state('rounded-lg flex flex-col text-center justify-center shadow-md w-full h-[10%] ');
+	let style = $state('mb-2 rounded-lg flex flex-col text-center justify-center shadow-md w-full h-[10%] ');
 	let background_color: string = '';
 	switch (notif.type) {
 		case "success":
@@ -24,5 +24,5 @@
 
 <button in:fade={{ duration: 500 }} out:fade={{ duration: 500 }} class={style} onclick={() => {notifier.remove(notif.id);}}>
 	<p class="font-bold">{notif.title}</p>
-	<p class="font-semibold">{notif.message}</p>
+	<p class="font-normal">{notif.message}</p>
 </button>

@@ -2,11 +2,9 @@
 	import env from "$lib/env";
 	import type SearchResult from "$lib/types/search_results";
 	import SearchResults from "$lib/components/SearchResults.svelte";
-	import { getUser } from "$lib/store.svelte";
 
 	let query: string = $state('');
 
-	const user = getUser();
 	let results: SearchResult[] = $state([]);
 
 	async function search(): Promise<void> {
