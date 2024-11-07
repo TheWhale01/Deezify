@@ -8,19 +8,6 @@ import { getContext, setContext } from "svelte";
 const USER_KEY = Symbol("USER");
 const PLAYER_KEY = Symbol("PLAYER");
 
-function rune<T>(init_value: T) {
-  let value: T = $state(init_value);
-
-  return {
-    get value() {
-      return value;
-    },
-    set value(v: T) {
-      value = v;
-    },
-  };
-}
-
 class User {
   id: number = $state(0);
   owner: boolean = $state(false);
@@ -60,10 +47,11 @@ class User {
 }
 
 class Player {
-  state: PlayState = $state(PlayState.PAUSED);
-  device_id: string = $state("");
-  songs: Track[] = $state([]);
-  current_song: Track = $derived(this.songs[0]);
+	state: PlayState = $state(PlayState.PAUSED);
+	device_id: string = $state("");
+	songs: Track[] = $state([]);
+	current_song: Track = $derived(this.songs[0]);
+	player = $state(undefined);
 }
 
 export function setUser(): User {

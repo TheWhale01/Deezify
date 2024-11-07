@@ -17,7 +17,7 @@
 	onMount(async () => {
 		await user.get_me();
 		await user.get_party_owner();
-		if (user.owner)
+		if (user.owner && user.service === Services.SPOTIFY)
 			initSpotifyPlayback();
 	})
 
@@ -37,6 +37,7 @@
 				getOAuthToken: cb => { cb(user.token) },
 				volume: 1,
 			});
+			playerbar.player = player;
 			player.addListener('not_ready', (message) => { console.err(message); notifier.add("Playback", message, 'error'); });
 			player.addListener('account_error', (message) => { console.err(message); notifier.add("Playback", message, 'error');});
 			player.addListener('playback_error', (message) => { console.err(message); notifier.add("Playback", message, 'error');});
@@ -44,7 +45,6 @@
 			player.addListener('ready', async ({ device_id }: {device_id: string}) => {
 				playerbar.device_id = device_id;
 				await setDeviceId(device_id);
-				player.activateElement()
 			});
 
 			player.addListener('player_state_changed', async ({ paused, track_window: { current_track } }) => {
