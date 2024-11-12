@@ -8,30 +8,36 @@
 	import PlayState from '$lib/enums/play_state.js';
 	import QueueCard from '$lib/components/QueueCard.svelte';
 	import { onMount } from 'svelte';
+	import { socket } from "$lib/socket";
+	import { getNotification } from "$lib/components/Notifier/Notifier.svelte";
 
 	const { data } = $props();
 
 	const player = getPlayer();
-	player.songs = data['songs'];
+	const notifier = getNotification();
 	const user = getUser();
-	
+
+	player.songs = data['songs'];
+
+	socket.on('track_added', (data: string) => {
+	 // Track is added multiple times
+		player.songs.push(data);
+	});
+
 	onMount(() => {
 		if (player.state === PlayState.PLAYING)
 			return ;
-		$effect(() => {
-			setSong();
-		})
+		if (user.owner && player.songs.length)
+		  setSong();
 	});
-	
+
 	async function setSong(): Promise<void> {
-		if (!user.owner)
-			return ;
-		const response = await fetch(env.BACKEND_URL + `/song/init_playback?song_id=${player.songs.length >= 1 ? player.current_song.song_id : null}`, {
+		const response = await fetch(env.BACKEND_URL + `/song/init_playback?song_id=${player.current_song.song_id}`, {
 			method: "PUT",
 			credentials: 'include'
 		});
-		if (response.status !== 200)
-			return ;
+		if (response.status !== 200 && response.status !== 204)
+		  return ;
 	}
 </script>
 

@@ -8,12 +8,17 @@
 	import PlayState from "$lib/enums/play_state";
 	import env from "$lib/env";
 	import { onMount } from "svelte";
+	import { socket } from "$lib/socket";
 
 	const notifier = setNotification();
 	const { children } = $props();
 	const user = setUser();
 	const playerbar = setPlayer();
 	let song_removed: boolean = $state(false);
+
+	socket.on('remove_track', () => {
+	 playerbar.songs.shift();
+	})
 
 	onMount(async () => {
 		await user.get_me();
@@ -39,9 +44,9 @@
 				volume: 1,
 			});
 			playerbar.player = player;
-			player.addListener('not_ready', (message) => { console.err(message); notifier.add("Playback", message, 'error'); });
-			player.addListener('account_error', (message) => { console.err(message); notifier.add("Playback", message, 'error');});
-			player.addListener('playback_error', (message) => { console.err(message); notifier.add("Playback", message, 'error');});
+			player.addListener('not_ready', (message) => { console.log(message); notifier.add("Playback", message, 'error'); });
+			player.addListener('account_error', (message) => { console.log(message); notifier.add("Playback", message, 'error');});
+			player.addListener('playback_error', (message) => { console.log(message); notifier.add("Playback", message, 'error');});
 
 			player.addListener('ready', async ({ device_id }: {device_id: string}) => {
 				playerbar.device_id = device_id;
@@ -65,6 +70,7 @@
 				}
 				if (!song_removed && current_track.id !== playerbar.current_song?.song_id) {
 					playerbar.remove_song();
+					socket.emit('remove_track', { party_id: user.party_id });
 					song_removed = true;
 				}
 			});
