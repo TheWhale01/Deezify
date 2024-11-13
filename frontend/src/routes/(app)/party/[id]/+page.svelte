@@ -19,11 +19,6 @@
 
 	player.songs = data['songs'];
 
-	socket.on('track_added', (data: string) => {
-	 // Track is added multiple times
-		player.songs.push(data);
-	});
-
 	onMount(() => {
 		if (player.state === PlayState.PLAYING)
 			return ;

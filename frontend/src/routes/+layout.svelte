@@ -16,9 +16,14 @@
 	const playerbar = setPlayer();
 	let song_removed: boolean = $state(false);
 
-	socket.on('remove_track', () => {
+	socket.on('track_removed', () => {
+	 console.log("bonsoir je ne suis pas moi !");
 	 playerbar.songs.shift();
-	})
+	});
+
+	socket.on('track_added', (data: string) => {
+		playerbar.songs.push(data);
+	});
 
 	onMount(async () => {
 		await user.get_me();
