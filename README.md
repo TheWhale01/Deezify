@@ -40,5 +40,7 @@ PGADMIN_DEFAULT_PASSWORD=
 Frontend will be accessible at `http://localhost:8080` and backend at `http://localhost:3000`
 
 ## TODO
-1. Socketio when adding playback
-2. Deezer
+1. Deezer
+2. Refactor wrapper for Spotify/Deezer API (backend)
+3. Change party id for UUID (QRCode)
+4. Make prev/next buttons work on player
